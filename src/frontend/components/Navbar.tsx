@@ -46,6 +46,18 @@ const Navbar = () => {
               سجل التدقيق
             </Link>
           )}
+
+          {hasPermission('trusted_persons', 'READ') && (
+            <Link to="/trusted-persons" className="navbar-link">
+              الموثوقيين
+            </Link>
+          )}
+
+          {hasPermission('manual_transfers', 'READ') && (
+            <Link to="/manual-transfers" className="navbar-link">
+              التحويلات
+            </Link>
+          )}
         </div>
 
         <div className="navbar-user">

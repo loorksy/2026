@@ -109,3 +109,82 @@ enum Action {
   UPDATE
   DELETE
 }
+
+enum SalaryType {
+  MONTHLY
+  BIWEEKLY
+}
+
+enum TransferMethod {
+  MANUAL_CASH
+  BANK_TRANSFER
+  CHECK
+}
+
+enum TransferStatus {
+  PENDING
+  COMPLETED
+  VERIFIED
+}
+
+enum RecordSalaryType {
+  SALARY
+  ADVANCE
+  OTHER
+}
+
+model TrustedPerson {
+  id              String            @id @default(uuid())
+  fullName        String
+  address         String
+  whatsappNumber  String
+  idDocuments     Json?
+  salaryType      SalaryType
+  baseSalary      Decimal           @db.Decimal(10, 2)
+  salaryPeriod    String?
+  bankAccount     String?
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  manualTransfers ManualTransfer[]
+  
+  @@map("trusted_persons")
+}
+
+model ManualTransfer {
+  id              String           @id @default(uuid())
+  trustedPersonId String
+  period          String
+  amount          Decimal          @db.Decimal(10, 2)
+  currency        String           @default("IQD")
+  transferDate    DateTime
+  transferMethod  TransferMethod
+  recipientInfo   String?
+  status          TransferStatus   @default(PENDING)
+  notes           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  trustedPerson   TrustedPerson    @relation(fields: [trustedPersonId], references: [id], onDelete: Cascade)
+  transferRecords TransferRecord[]
+  
+  @@map("manual_transfers")
+}
+
+model TransferRecord {
+  id               String            @id @default(uuid())
+  manualTransferId String
+  userId           String?
+  employeeName     String
+  amount           Decimal           @db.Decimal(10, 2)
+  salaryType       RecordSalaryType
+  description      String?
+  confirmed        Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  
+  manualTransfer   ManualTransfer    @relation(fields: [manualTransferId], references: [id], onDelete: Cascade)
+  
+  @@map("transfer_records")
+}

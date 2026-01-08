@@ -6,6 +6,9 @@ import roleRoutes from './routes/roleRoutes';
 import permissionRoutes from './routes/permissionRoutes';
 import userRoutes from './routes/userRoutes';
 import auditLogRoutes from './routes/auditLogRoutes';
+import trustedPersonRoutes from './routes/trustedPersonRoutes';
+import manualTransferRoutes from './routes/manualTransferRoutes';
+import transferRecordRoutes from './routes/transferRecordRoutes';
 
 dotenv.config();
 
@@ -21,6 +24,9 @@ app.use('/api/roles', roleRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/audit-logs', auditLogRoutes);
+app.use('/api/trusted-persons', trustedPersonRoutes);
+app.use('/api/manual-transfers', manualTransferRoutes);
+app.use('/api/transfer-records', transferRecordRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({

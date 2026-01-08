@@ -11,7 +11,10 @@ const resources = [
   'charges',
   'reports',
   'audit_logs',
-  'dashboard'
+  'dashboard',
+  'trusted_persons',
+  'manual_transfers',
+  'transfer_records'
 ];
 
 const actions = [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE];
@@ -34,7 +37,16 @@ const rolesConfig = {
       { resource: 'charges', action: Action.UPDATE },
       { resource: 'reports', action: Action.READ },
       { resource: 'dashboard', action: Action.READ },
-      { resource: 'audit_logs', action: Action.READ }
+      { resource: 'audit_logs', action: Action.READ },
+      { resource: 'trusted_persons', action: Action.CREATE },
+      { resource: 'trusted_persons', action: Action.READ },
+      { resource: 'trusted_persons', action: Action.UPDATE },
+      { resource: 'manual_transfers', action: Action.CREATE },
+      { resource: 'manual_transfers', action: Action.READ },
+      { resource: 'manual_transfers', action: Action.UPDATE },
+      { resource: 'transfer_records', action: Action.CREATE },
+      { resource: 'transfer_records', action: Action.READ },
+      { resource: 'transfer_records', action: Action.UPDATE }
     ]
   },
   Manager: {
