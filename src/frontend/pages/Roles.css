@@ -1,0 +1,41 @@
+.roles-page {
+  padding: 24px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.detail-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.permission-badge {
+  padding: 8px 12px;
+  background: var(--bg-color);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.modal-body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
