@@ -189,6 +189,156 @@ class ApiClient {
   async getAuditLogStats(): Promise<ApiResponse> {
     return this.request('/audit-logs/stats');
   }
+
+  async getTrustedPersons(params?: { isActive?: boolean }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/trusted-persons${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getTrustedPersonById(id: string): Promise<ApiResponse> {
+    return this.request(`/trusted-persons/${id}`);
+  }
+
+  async createTrustedPerson(data: {
+    fullName: string;
+    address: string;
+    whatsappNumber: string;
+    idDocuments?: any;
+    salaryType: string;
+    baseSalary: number;
+    salaryPeriod?: string;
+    bankAccount?: string;
+  }): Promise<ApiResponse> {
+    return this.request('/trusted-persons', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateTrustedPerson(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/trusted-persons/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleTrustedPersonStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/trusted-persons/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteTrustedPerson(id: string): Promise<ApiResponse> {
+    return this.request(`/trusted-persons/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async getManualTransfers(params?: {
+    status?: string;
+    trustedPersonId?: string;
+    period?: string;
+  }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/manual-transfers${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getManualTransferById(id: string): Promise<ApiResponse> {
+    return this.request(`/manual-transfers/${id}`);
+  }
+
+  async getTransfersByPeriod(period: string): Promise<ApiResponse> {
+    return this.request(`/manual-transfers/period/${period}`);
+  }
+
+  async createManualTransfer(data: {
+    trustedPersonId: string;
+    period: string;
+    amount: number;
+    currency?: string;
+    transferDate: string;
+    transferMethod: string;
+    recipientInfo?: string;
+    notes?: string;
+  }): Promise<ApiResponse> {
+    return this.request('/manual-transfers', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateManualTransfer(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/manual-transfers/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateTransferStatus(id: string, status: string): Promise<ApiResponse> {
+    return this.request(`/manual-transfers/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    });
+  }
+
+  async deleteManualTransfer(id: string): Promise<ApiResponse> {
+    return this.request(`/manual-transfers/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  async getTransferRecordsByTransfer(transferId: string): Promise<ApiResponse> {
+    return this.request(`/transfer-records/transfer/${transferId}`);
+  }
+
+  async createTransferRecord(data: {
+    manualTransferId: string;
+    userId?: string;
+    employeeName: string;
+    amount: number;
+    salaryType: string;
+    description?: string;
+  }): Promise<ApiResponse> {
+    return this.request('/transfer-records', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async bulkCreateTransferRecords(data: {
+    manualTransferId: string;
+    records: Array<{
+      userId?: string;
+      employeeName: string;
+      amount: number;
+      salaryType: string;
+      description?: string;
+    }>;
+  }): Promise<ApiResponse> {
+    return this.request('/transfer-records/bulk', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateTransferRecord(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/transfer-records/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async confirmTransferRecord(id: string): Promise<ApiResponse> {
+    return this.request(`/transfer-records/${id}/confirm`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteTransferRecord(id: string): Promise<ApiResponse> {
+    return this.request(`/transfer-records/${id}`, {
+      method: 'DELETE'
+    });
+  }
 }
 
 export const api = new ApiClient();

@@ -8,6 +8,11 @@ import Roles from './pages/Roles';
 import Permissions from './pages/Permissions';
 import AuditLogs from './pages/AuditLogs';
 import AccessDenied from './pages/AccessDenied';
+import TrustedPersons from './pages/TrustedPersons';
+import TrustedPersonDetail from './pages/TrustedPersonDetail';
+import ManualTransfers from './pages/ManualTransfers';
+import ManualTransferDetail from './pages/ManualTransferDetail';
+import CreateManualTransfer from './pages/CreateManualTransfer';
 import './App.css';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -66,6 +71,46 @@ function App() {
             element={
               <ProtectedRoute>
                 <AccessDenied />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trusted-persons"
+            element={
+              <ProtectedRoute>
+                <TrustedPersons />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trusted-persons/:id"
+            element={
+              <ProtectedRoute>
+                <TrustedPersonDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manual-transfers"
+            element={
+              <ProtectedRoute>
+                <ManualTransfers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manual-transfers/new"
+            element={
+              <ProtectedRoute>
+                <CreateManualTransfer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manual-transfers/:id"
+            element={
+              <ProtectedRoute>
+                <ManualTransferDetail />
               </ProtectedRoute>
             }
           />
