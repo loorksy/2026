@@ -231,6 +231,12 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
       shipmentCount,
       companyCount,
       creditCount,
+      hostCount,
+      subAgentCount,
+      approvedCount,
+      trustedPersonCount,
+      supervisorCount,
+      marketerCount,
       recentLogs,
       totalRevenue
     ] = await Promise.all([
@@ -239,6 +245,12 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
       prisma.shipping.count(),
       prisma.company.count(),
       prisma.credit.count(),
+      prisma.host.count(),
+      prisma.subAgent.count(),
+      prisma.approved.count(),
+      prisma.trustedPerson.count(),
+      prisma.supervisor.count(),
+      prisma.marketer.count(),
       prisma.auditLog.findMany({
         take: 5,
         orderBy: { timestamp: 'desc' },
@@ -259,7 +271,13 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
           roles: roleCount,
           shipments: shipmentCount,
           companies: companyCount,
-          credits: creditCount
+          credits: creditCount,
+          hosts: hostCount,
+          subAgents: subAgentCount,
+          approved: approvedCount,
+          trustedPersons: trustedPersonCount,
+          supervisors: supervisorCount,
+          marketers: marketerCount
         },
         recentLogs,
         totalRevenue: totalRevenue._sum.price || 0

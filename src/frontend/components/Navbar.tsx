@@ -39,7 +39,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-brand">
-          نظام إدارة الأدوار والصلاحيات
+          نظام إدارة المستخدمين
         </Link>
 
         <div className="navbar-menu">
@@ -65,15 +65,53 @@ const Navbar = () => {
             </Link>
           )}
 
+          <div 
+            className="navbar-dropdown"
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            <span className="navbar-link dropdown-toggle">
+              إدارة المستخدمين ▼
+            </span>
+            {showDropdown && (
+              <div className="dropdown-menu">
+                {hasPermission('hosts', 'READ') && (
+                  <Link to="/hosts" className="dropdown-item">
+                    المضيفين
+                  </Link>
+                )}
+                {hasPermission('sub_agents', 'READ') && (
+                  <Link to="/sub-agents" className="dropdown-item">
+                    الوكلاء الفرعيين
+                  </Link>
+                )}
+                {hasPermission('approved', 'READ') && (
+                  <Link to="/approved" className="dropdown-item">
+                    المعتمدين
+                  </Link>
+                )}
+                {hasPermission('trusted_persons', 'READ') && (
+                  <Link to="/trusted-persons" className="dropdown-item">
+                    الموثوقيين
+                  </Link>
+                )}
+                {hasPermission('supervisors', 'READ') && (
+                  <Link to="/supervisors" className="dropdown-item">
+                    المشرفين
+                  </Link>
+                )}
+                {hasPermission('marketers', 'READ') && (
+                  <Link to="/marketers" className="dropdown-item">
+                    المسوقين
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+
           {hasPermission('audit_logs', 'READ') && (
             <Link to="/audit-logs" className="navbar-link">
               سجل التدقيق
-            </Link>
-          )}
-
-          {hasPermission('trusted_persons', 'READ') && (
-            <Link to="/trusted-persons" className="navbar-link">
-              الموثوقيين
             </Link>
           )}
 
