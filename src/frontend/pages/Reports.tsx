@@ -53,7 +53,7 @@ const Reports = () => {
     }
   };
 
-  const handleExport = (format: 'pdf' | 'excel' | 'csv') => {
+  const handleExport = (_format: 'pdf' | 'excel' | 'csv') => {
     // Simple CSV export implementation
     if (!reportData) return;
 

@@ -4,11 +4,39 @@ export interface User {
   username: string;
   firstName?: string;
   lastName?: string;
-  isActive: boolean;
+  userType?: UserType;
+  role?: RoleType;
+  status?: UserStatus;
+  isActive?: boolean;
+  lastLogin?: string | null;
+  twoFactorEnabled?: boolean;
+  emailVerified?: boolean;
   roles?: Role[];
   permissions?: Permission[];
   createdAt?: string;
   updatedAt?: string;
+}
+
+export enum UserType {
+  Host = 'Host',
+  SubAgent = 'SubAgent',
+  Approved = 'Approved',
+  TrustedPerson = 'TrustedPerson',
+  Supervisor = 'Supervisor',
+  Marketer = 'Marketer'
+}
+
+export enum RoleType {
+  Admin = 'Admin',
+  Accountant = 'Accountant',
+  Manager = 'Manager',
+  Viewer = 'Viewer'
+}
+
+export enum UserStatus {
+  active = 'active',
+  inactive = 'inactive',
+  suspended = 'suspended'
 }
 
 export interface Role {
@@ -64,11 +92,21 @@ export interface AuditLog {
   userAgent?: string;
 }
 
+export interface Session {
+  id: string;
+  deviceInfo?: string | null;
+  ipAddress?: string | null;
+  userAgent?: string | null;
+  createdAt: string;
+  expiresAt: string;
+}
+
 export interface AuthResponse {
   success: boolean;
   message?: string;
   data?: {
     token: string;
+    refreshToken: string;
     user: User;
   };
 }

@@ -15,7 +15,12 @@
     "prisma:studio": "prisma studio",
     "seed": "ts-node src/backend/prisma/seed.ts"
   },
-  "keywords": ["rbac", "roles", "permissions", "audit-log"],
+  "keywords": [
+    "rbac",
+    "roles",
+    "permissions",
+    "audit-log"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,6 +29,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.5.1",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

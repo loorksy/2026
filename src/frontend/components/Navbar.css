@@ -1,74 +1,224 @@
 .navbar {
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .navbar-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 16px 20px;
+  padding: 0 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  justify-content: space-between;
+  height: 64px;
 }
 
 .navbar-brand {
   font-size: 18px;
-  font-weight: 600;
-  color: var(--primary-color);
+  font-weight: 700;
+  color: #333;
   text-decoration: none;
-  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .navbar-menu {
   display: flex;
-  gap: 16px;
-  flex: 1;
+  align-items: center;
+  gap: 5px;
+  margin-right: auto;
+  margin-left: 30px;
 }
 
 .navbar-link {
-  color: var(--text-secondary);
+  padding: 8px 16px;
+  color: #555;
   text-decoration: none;
-  padding: 8px 12px;
+  font-size: 14px;
   border-radius: 6px;
-  transition: all 0.2s;
-  white-space: nowrap;
+  transition: all 0.2s ease;
 }
 
 .navbar-link:hover {
-  background: var(--bg-color);
-  color: var(--text-primary);
+  background: #f5f5f5;
+  color: #333;
 }
 
 .navbar-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.user-menu-container {
+  position: relative;
+}
+
+.user-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.user-menu-button:hover {
+  background: #e9ecef;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .navbar-username {
-  color: var(--text-primary);
+  font-size: 14px;
+  color: #333;
   font-weight: 500;
-  white-space: nowrap;
 }
 
-.btn-sm {
-  padding: 6px 12px;
-  font-size: 13px;
+.dropdown-arrow {
+  font-size: 10px;
+  color: #666;
+  transition: transform 0.2s ease;
 }
 
-@media (max-width: 768px) {
-  .navbar-container {
-    flex-wrap: wrap;
+.user-menu-button:hover .dropdown-arrow {
+  color: #333;
+}
+
+.user-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 280px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1001;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+.user-menu-header {
+  padding: 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #eee;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-email {
+  font-size: 13px;
+  color: #666;
+}
+
+.user-role {
+  display: flex;
+  gap: 8px;
+}
+
+.role-badge {
+  background: #667eea;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.user-menu-divider {
+  height: 1px;
+  background: #eee;
+  margin: 4px 0;
+}
+
+.user-menu-item {
+  width: 100%;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  text-align: right;
+  transition: background 0.2s ease;
+}
+
+.user-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.user-menu-item.logout {
+  color: #dc2626;
+}
+
+.user-menu-item.logout:hover {
+  background: #fee2e2;
+}
+
+.menu-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+}
+
+@media (max-width: 992px) {
   .navbar-menu {
-    width: 100%;
-    justify-content: flex-start;
-    overflow-x: auto;
+    display: none;
+  }
+  
+  .navbar-username {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0 15px;
+  }
+  
+  .navbar-brand {
+    font-size: 16px;
   }
 }

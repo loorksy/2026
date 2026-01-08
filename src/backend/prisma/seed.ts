@@ -1,4 +1,4 @@
-import { PrismaClient, Action } from '@prisma/client';
+import { PrismaClient, Action, UserType, RoleType, UserStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -140,7 +140,7 @@ async function main() {
   }
 
   console.log('👤 Creating admin user...');
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashedPassword = await bcrypt.hash('admin123', 12);
   const adminRole = await prisma.role.findUnique({
     where: { name: 'Admin' }
   });
@@ -154,7 +154,10 @@ async function main() {
       password: hashedPassword,
       firstName: 'System',
       lastName: 'Administrator',
-      isActive: true
+      userType: UserType.Host,
+      role: RoleType.Admin,
+      status: UserStatus.active,
+      emailVerified: true
     }
   });
 
@@ -178,13 +181,37 @@ async function main() {
 
   console.log('👤 Creating test users...');
   const testUsers = [
-    { email: 'accountant@example.com', username: 'accountant', role: 'Accountant', firstName: 'John', lastName: 'Accountant' },
-    { email: 'manager@example.com', username: 'manager', role: 'Manager', firstName: 'Jane', lastName: 'Manager' },
-    { email: 'viewer@example.com', username: 'viewer', role: 'Viewer', firstName: 'Bob', lastName: 'Viewer' }
+    { 
+      email: 'accountant@example.com', 
+      username: 'accountant', 
+      role: 'Accountant', 
+      roleType: RoleType.Accountant,
+      firstName: 'John', 
+      lastName: 'Accountant',
+      userType: UserType.Host
+    },
+    { 
+      email: 'manager@example.com', 
+      username: 'manager', 
+      role: 'Manager',
+      roleType: RoleType.Manager, 
+      firstName: 'Jane', 
+      lastName: 'Manager',
+      userType: UserType.Host
+    },
+    { 
+      email: 'viewer@example.com', 
+      username: 'viewer', 
+      role: 'Viewer',
+      roleType: RoleType.Viewer, 
+      firstName: 'Bob', 
+      lastName: 'Viewer',
+      userType: UserType.Host
+    }
   ];
 
   for (const testUser of testUsers) {
-    const password = await bcrypt.hash('password123', 10);
+    const password = await bcrypt.hash('password123', 12);
     const user = await prisma.user.upsert({
       where: { email: testUser.email },
       update: {},
@@ -194,7 +221,10 @@ async function main() {
         password,
         firstName: testUser.firstName,
         lastName: testUser.lastName,
-        isActive: true
+        userType: testUser.userType,
+        role: testUser.roleType,
+        status: UserStatus.active,
+        emailVerified: true
       }
     });
 

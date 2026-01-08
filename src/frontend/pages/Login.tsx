@@ -1,33 +1,33 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { api } from '../utils/api';
-import { setToken, setUser } from '../utils/auth';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, error, clearError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [localError, setLocalError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    clearError();
+    setLocalError('');
+
+    if (!email || !password) {
+      setLocalError('البريد الإلكتروني وكلمة المرور مطلوبان');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await api.login(email, password);
-
-      if (response.success && response.data) {
-        setToken(response.data.token);
-        setUser(response.data.user);
-        navigate('/');
-      } else {
-        setError(response.message || 'فشل تسجيل الدخول');
-      }
+      await login(email, password);
+      navigate('/');
     } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء تسجيل الدخول');
+      setLocalError(err.message || 'فشل تسجيل الدخول');
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,11 @@ const Login = () => {
           <p>تسجيل الدخول إلى حسابك</p>
         </div>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {(localError || error) && (
+          <div className="alert alert-danger">
+            {localError || error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -50,9 +54,13 @@ const Login = () => {
               type="email"
               className="form-input"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearError();
+                setLocalError('');
+              }}
               placeholder="example@domain.com"
+              required
             />
           </div>
 
@@ -62,9 +70,13 @@ const Login = () => {
               type="password"
               className="form-input"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              onChange={(e) => {
+                setPassword(e.target.value);
+                clearError();
+                setLocalError('');
+              }}
               placeholder="••••••••"
+              required
             />
           </div>
 
@@ -77,14 +89,21 @@ const Login = () => {
           </button>
         </form>
 
+        <div className="login-links">
+          <Link to="/auth/forgot-password">نسيت كلمة المرور؟</Link>
+        </div>
+
         <div className="login-footer">
-          <p>حسابات تجريبية:</p>
-          <ul>
-            <li>Admin: admin@example.com / admin123</li>
-            <li>Accountant: accountant@example.com / password123</li>
-            <li>Manager: manager@example.com / password123</li>
-            <li>Viewer: viewer@example.com / password123</li>
-          </ul>
+          <p>ليس لديك حساب؟ <Link to="/register">إنشاء حساب جديد</Link></p>
+          <div className="demo-accounts">
+            <p>حسابات تجريبية:</p>
+            <ul>
+              <li>Admin: admin@example.com / admin123</li>
+              <li>Accountant: accountant@example.com / password123</li>
+              <li>Manager: manager@example.com / password123</li>
+              <li>Viewer: viewer@example.com / password123</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

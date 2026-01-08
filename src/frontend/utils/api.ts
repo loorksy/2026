@@ -1,4 +1,4 @@
-import { ApiResponse, AuthResponse, PaginatedResponse } from '../types';
+import { ApiResponse, AuthResponse, PaginatedResponse, User } from '../types';
 
 const API_BASE_URL = '/api';
 
@@ -11,9 +11,14 @@ class ApiClient {
     };
   }
 
+  private getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+
   async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retries: number = 1
   ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -26,6 +31,17 @@ class ApiClient {
 
       const data = await response.json();
 
+      // Handle token refresh for 401 errors
+      if (response.status === 401 && retries > 0 && this.getRefreshToken()) {
+        try {
+          await this.refreshAuthToken();
+          return this.request(endpoint, options, retries - 1);
+        } catch (refreshError) {
+          this.clearAuth();
+          throw new Error('Session expired, please login again');
+        }
+      }
+
       if (!response.ok) {
         throw new Error(data.message || 'حدث خطأ في الطلب');
       }
@@ -37,6 +53,37 @@ class ApiClient {
     }
   }
 
+  private async refreshAuthToken(): Promise<void> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ refreshToken })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success && data.data) {
+      localStorage.setItem('token', data.data.token);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.data.user));
+    } else {
+      throw new Error(data.message || 'Failed to refresh token');
+    }
+  }
+
+  private clearAuth(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  }
+
+  // Auth methods
   async login(email: string, password: string): Promise<AuthResponse> {
     return this.request<AuthResponse['data']>('/auth/login', {
       method: 'POST',
@@ -50,6 +97,7 @@ class ApiClient {
     password: string;
     firstName?: string;
     lastName?: string;
+    userType?: string;
   }): Promise<ApiResponse> {
     return this.request('/auth/register', {
       method: 'POST',
@@ -57,10 +105,87 @@ class ApiClient {
     });
   }
 
+  async logout(): Promise<ApiResponse> {
+    return this.request('/auth/logout', {
+      method: 'POST'
+    });
+  }
+
+  async logoutAll(): Promise<ApiResponse> {
+    return this.request('/auth/logout-all', {
+      method: 'POST'
+    });
+  }
+
+  async refreshToken(refreshToken: string): Promise<AuthResponse> {
+    return this.request<AuthResponse['data']>('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken })
+    });
+  }
+
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    return this.request('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+  }
+
+  async resetPassword(token: string, password: string, confirmPassword: string): Promise<ApiResponse> {
+    return this.request('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password, confirmPassword })
+    });
+  }
+
+  async verifyEmail(): Promise<ApiResponse> {
+    return this.request('/auth/verify-email', {
+      method: 'POST'
+    });
+  }
+
+  async resendVerification(): Promise<ApiResponse> {
+    return this.request('/auth/resend-verification', {
+      method: 'POST'
+    });
+  }
+
   async getCurrentUser(): Promise<ApiResponse> {
     return this.request('/auth/me');
   }
 
+  async updateProfile(data: {
+    firstName?: string;
+    lastName?: string;
+  }): Promise<ApiResponse<User>> {
+    return this.request('/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async changePassword(data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }): Promise<ApiResponse> {
+    return this.request('/auth/password', {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async getMySessions(): Promise<ApiResponse> {
+    return this.request('/auth/sessions');
+  }
+
+  async revokeSession(sessionId: string): Promise<ApiResponse> {
+    return this.request(`/auth/sessions/${sessionId}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // Role methods
   async getRoles(): Promise<ApiResponse> {
     return this.request('/roles');
   }
@@ -101,6 +226,7 @@ class ApiClient {
     });
   }
 
+  // Permission methods
   async getPermissions(): Promise<ApiResponse> {
     return this.request('/permissions');
   }
@@ -109,6 +235,7 @@ class ApiClient {
     return this.request(`/permissions/${id}`);
   }
 
+  // User methods
   async getUsers(): Promise<ApiResponse> {
     return this.request('/users');
   }
@@ -167,6 +294,7 @@ class ApiClient {
     });
   }
 
+  // Audit log methods
   async getAuditLogs(params?: {
     page?: number;
     limit?: number;
@@ -176,10 +304,11 @@ class ApiClient {
     startDate?: string;
     endDate?: string;
   }): Promise<PaginatedResponse<any>> {
-    const queryString = new URLSearchParams(
+    const queryString = params ? new URLSearchParams(
       params as Record<string, string>
-    ).toString();
-    return this.request(`/audit-logs${queryString ? `?${queryString}` : ''}`);
+    ).toString() : '';
+    const response = await this.request<{ logs: any[]; pagination: any }>(`/audit-logs${queryString ? `?${queryString}` : ''}`);
+    return response as unknown as PaginatedResponse<any>;
   }
 
   async getAuditLogById(id: string): Promise<ApiResponse> {
@@ -190,6 +319,7 @@ class ApiClient {
     return this.request('/audit-logs/stats');
   }
 
+  // Trusted person methods
   async getTrustedPersons(params?: { isActive?: boolean }): Promise<ApiResponse> {
     const queryString = params ? new URLSearchParams(params as any).toString() : '';
     return this.request(`/trusted-persons${queryString ? `?${queryString}` : ''}`);
@@ -234,6 +364,7 @@ class ApiClient {
     });
   }
 
+  // Manual transfer methods
   async getManualTransfers(params?: {
     status?: string;
     trustedPersonId?: string;
@@ -287,6 +418,7 @@ class ApiClient {
     });
   }
 
+  // Transfer record methods
   async getTransferRecordsByTransfer(transferId: string): Promise<ApiResponse> {
     return this.request(`/transfer-records/transfer/${transferId}`);
   }
@@ -340,7 +472,7 @@ class ApiClient {
     });
   }
 
-  // Reports
+  // Report methods
   async getPayrollReport(params?: any): Promise<ApiResponse> {
     const queryString = params ? new URLSearchParams(params).toString() : '';
     return this.request(`/reports/payroll${queryString ? `?${queryString}` : ''}`);

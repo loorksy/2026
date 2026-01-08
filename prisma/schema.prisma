@@ -8,21 +8,84 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(uuid())
-  email         String      @unique
-  username      String      @unique
-  password      String
-  firstName     String?
-  lastName      String?
-  isActive      Boolean     @default(true)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  
-  userRoles     UserRole[]
-  auditLogs     AuditLog[]
-  assignedRoles UserRole[]  @relation("AssignedBy")
-  
+  id              String        @id @default(uuid())
+  email           String        @unique
+  username        String        @unique
+  password        String
+  firstName       String?
+  lastName        String?
+  userType        UserType      @default(Host)
+  role            RoleType      @default(Viewer)
+  status          UserStatus    @default(active)
+  lastLogin       DateTime?
+  twoFactorEnabled Boolean      @default(false)
+  twoFactorSecret  String?
+  emailVerified   Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  sessions        Session[]
+  passwordResets  PasswordReset[]
+  userRoles       UserRole[]
+  auditLogs       AuditLog[]
+  assignedRoles   UserRole[]    @relation("AssignedBy")
+
   @@map("users")
+}
+
+enum UserType {
+  Host
+  SubAgent
+  Approved
+  TrustedPerson
+  Supervisor
+  Marketer
+}
+
+enum RoleType {
+  Admin
+  Accountant
+  Manager
+  Viewer
+}
+
+enum UserStatus {
+  active
+  inactive
+  suspended
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  token        String   @unique
+  refreshToken String   @unique
+  deviceInfo   String?
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("password_resets")
 }
 
 model Role {
