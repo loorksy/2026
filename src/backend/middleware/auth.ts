@@ -52,7 +52,7 @@ export const authenticate = async (
       }
     });
 
-    if (!user || !user.isActive) {
+    if (!user || user.status === 'inactive' || user.status === 'suspended') {
       return res.status(401).json({
         success: false,
         message: 'المستخدم غير موجود أو غير نشط'

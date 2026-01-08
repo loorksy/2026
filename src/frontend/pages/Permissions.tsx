@@ -3,6 +3,7 @@ import { api } from '../utils/api';
 import { Permission } from '../types';
 
 const Permissions = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [groupedPermissions, setGroupedPermissions] = useState<Record<string, Permission[]>>({});
   const [loading, setLoading] = useState(true);

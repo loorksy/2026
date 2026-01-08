@@ -6,7 +6,10 @@
     "noEmit": false,
     "outDir": "./dist/backend",
     "rootDir": "./src/backend",
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src/backend/**/*"],
   "exclude": ["node_modules"]

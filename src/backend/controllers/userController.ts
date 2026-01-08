@@ -15,7 +15,10 @@ export const getAllUsers = async (req: AuthRequest, res: Response) => {
         username: true,
         firstName: true,
         lastName: true,
-        isActive: true,
+        status: true,
+        userType: true,
+        role: true,
+        lastLogin: true,
         createdAt: true,
         updatedAt: true,
         userRoles: {
@@ -59,7 +62,11 @@ export const getUserById = async (req: AuthRequest, res: Response) => {
         username: true,
         firstName: true,
         lastName: true,
-        isActive: true,
+        status: true,
+        userType: true,
+        role: true,
+        lastLogin: true,
+        emailVerified: true,
         createdAt: true,
         updatedAt: true,
         userRoles: {
@@ -136,7 +143,7 @@ export const createUser = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({
       data: {
@@ -191,7 +198,7 @@ export const createUser = async (req: AuthRequest, res: Response) => {
 export const updateUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { email, username, firstName, lastName, isActive } = req.body;
+    const { email, username, firstName, lastName, status } = req.body;
 
     const existingUser = await prisma.user.findUnique({
       where: { id }
@@ -211,7 +218,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
         username: username || existingUser.username,
         firstName: firstName !== undefined ? firstName : existingUser.firstName,
         lastName: lastName !== undefined ? lastName : existingUser.lastName,
-        isActive: isActive !== undefined ? isActive : existingUser.isActive
+        status: status || existingUser.status
       },
       select: {
         id: true,
@@ -219,7 +226,10 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
         username: true,
         firstName: true,
         lastName: true,
-        isActive: true,
+        status: true,
+        userType: true,
+        role: true,
+        createdAt: true,
         updatedAt: true
       }
     });
@@ -230,7 +240,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
       resource: 'users',
       resourceId: id,
       oldValues: existingUser,
-      newValues: { email, username, firstName, lastName, isActive },
+      newValues: { email, username, firstName, lastName, status },
       ipAddress: req.ip,
       userAgent: req.headers['user-agent']
     });

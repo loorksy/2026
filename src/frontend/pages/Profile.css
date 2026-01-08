@@ -1,0 +1,180 @@
+.profile-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-page .page-header {
+  margin-bottom: 30px;
+}
+
+.profile-page .page-header h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.profile-page .page-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.profile-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.profile-card .card-header {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-card .card-header h2 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+}
+
+.profile-card form {
+  padding: 20px;
+}
+
+.profile-card .form-row {
+  margin-bottom: 15px;
+}
+
+.info-grid {
+  padding: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: #666;
+  font-size: 14px;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-suspended {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.roles-section,
+.permissions-section {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.roles-section:last-child,
+.permissions-section:last-child {
+  border-bottom: none;
+}
+
+.roles-section h3,
+.permissions-section h3 {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 15px 0;
+}
+
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.role-badge {
+  background: #667eea;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.permissions-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.permission-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.permission-item:last-child {
+  border-bottom: none;
+}
+
+.permission-resource {
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.permission-action {
+  background: #e5e7eb;
+  color: #666;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.no-data {
+  color: #999;
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
+}
