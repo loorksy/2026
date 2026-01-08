@@ -339,6 +339,38 @@ class ApiClient {
       method: 'DELETE'
     });
   }
+
+  // Reports
+  async getPayrollReport(params?: any): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params).toString() : '';
+    return this.request(`/reports/payroll${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getShippingReport(params?: any): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params).toString() : '';
+    return this.request(`/reports/shipping${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getProfitsReport(params?: any): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params).toString() : '';
+    return this.request(`/reports/profits${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getCreditsReport(): Promise<ApiResponse> {
+    return this.request('/reports/credits');
+  }
+
+  async getCompaniesReport(): Promise<ApiResponse> {
+    return this.request('/reports/companies');
+  }
+
+  async getExchangeDiffsReport(): Promise<ApiResponse> {
+    return this.request('/reports/exchange-diffs');
+  }
+
+  async getDashboardReportStats(): Promise<ApiResponse> {
+    return this.request('/reports/dashboard-stats');
+  }
 }
 
 export const api = new ApiClient();

@@ -15,7 +15,8 @@ rbac-system/
 │   │   │   ├── auditLogController.ts
 │   │   │   ├── permissionController.ts
 │   │   │   ├── roleController.ts
-│   │   │   └── userController.ts
+│   │   │   ├── userController.ts
+│   │   │   └── reportController.ts
 │   │   │
 │   │   ├── middleware/      # Express middleware
 │   │   │   ├── auth.ts      # JWT authentication & authorization
@@ -26,7 +27,8 @@ rbac-system/
 │   │   │   ├── auditLogRoutes.ts
 │   │   │   ├── permissionRoutes.ts
 │   │   │   ├── roleRoutes.ts
-│   │   │   └── userRoutes.ts
+│   │   │   ├── userRoutes.ts
+│   │   │   └── reportRoutes.ts
 │   │   │
 │   │   ├── prisma/
 │   │   │   └── seed.ts      # Database seeding
