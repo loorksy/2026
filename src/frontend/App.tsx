@@ -8,8 +8,13 @@ import Roles from './pages/Roles';
 import Permissions from './pages/Permissions';
 import AuditLogs from './pages/AuditLogs';
 import AccessDenied from './pages/AccessDenied';
+import Hosts from './pages/Hosts';
+import SubAgents from './pages/SubAgents';
+import ApprovedList from './pages/ApprovedList';
 import TrustedPersons from './pages/TrustedPersons';
 import TrustedPersonDetail from './pages/TrustedPersonDetail';
+import Supervisors from './pages/Supervisors';
+import Marketers from './pages/Marketers';
 import ManualTransfers from './pages/ManualTransfers';
 import ManualTransferDetail from './pages/ManualTransferDetail';
 import CreateManualTransfer from './pages/CreateManualTransfer';
@@ -75,6 +80,58 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Hosts */}
+          <Route
+            path="/hosts"
+            element={
+              <ProtectedRoute>
+                <Hosts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hosts/:id"
+            element={
+              <ProtectedRoute>
+                <Hosts />
+              </ProtectedRoute>
+            }
+          />
+          {/* Sub-Agents */}
+          <Route
+            path="/sub-agents"
+            element={
+              <ProtectedRoute>
+                <SubAgents />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sub-agents/:id"
+            element={
+              <ProtectedRoute>
+                <SubAgents />
+              </ProtectedRoute>
+            }
+          />
+          {/* Approved */}
+          <Route
+            path="/approved"
+            element={
+              <ProtectedRoute>
+                <ApprovedList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/approved/:id"
+            element={
+              <ProtectedRoute>
+                <ApprovedList />
+              </ProtectedRoute>
+            }
+          />
+          {/* Trusted Persons */}
           <Route
             path="/trusted-persons"
             element={
@@ -91,6 +148,41 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Supervisors */}
+          <Route
+            path="/supervisors"
+            element={
+              <ProtectedRoute>
+                <Supervisors />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/supervisors/:id"
+            element={
+              <ProtectedRoute>
+                <Supervisors />
+              </ProtectedRoute>
+            }
+          />
+          {/* Marketers */}
+          <Route
+            path="/marketers"
+            element={
+              <ProtectedRoute>
+                <Marketers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/marketers/:id"
+            element={
+              <ProtectedRoute>
+                <Marketers />
+              </ProtectedRoute>
+            }
+          />
+          {/* Manual Transfers */}
           <Route
             path="/manual-transfers"
             element={
@@ -115,6 +207,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Reports */}
           <Route
             path="/reports"
             element={
