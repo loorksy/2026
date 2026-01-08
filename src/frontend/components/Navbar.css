@@ -1,0 +1,74 @@
+.navbar {
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.navbar-brand {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar-menu {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.navbar-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.navbar-link:hover {
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-username {
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-wrap: wrap;
+  }
+
+  .navbar-menu {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+}
