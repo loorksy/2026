@@ -70,6 +70,7 @@ export const getTrustedPersonById = async (req: AuthRequest, res: Response) => {
 export const createTrustedPerson = async (req: AuthRequest, res: Response) => {
   try {
     const {
+      userId,
       fullName,
       address,
       whatsappNumber,
@@ -87,8 +88,22 @@ export const createTrustedPerson = async (req: AuthRequest, res: Response) => {
       });
     }
 
+    // Validate user if provided
+    if (userId) {
+      const user = await prisma.user.findUnique({
+        where: { id: userId }
+      });
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'المستخدم غير موجود'
+        });
+      }
+    }
+
     const trustedPerson = await prisma.trustedPerson.create({
       data: {
+        userId: userId || req.user?.id,
         fullName,
         address,
         whatsappNumber,

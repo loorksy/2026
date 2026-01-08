@@ -91,3 +91,113 @@ export interface PaginatedResponse<T> {
     };
   };
 }
+
+// ============ New User Types ============
+
+export interface Host {
+  id: string;
+  userId: string;
+  fullName: string;
+  agencyName: string;
+  address: string;
+  whatsappNumber: string;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+export interface SubAgent {
+  id: string;
+  userId: string;
+  roomId: string;
+  activationCode: string;
+  numberOfUsers: number;
+  whatsappNumber: string;
+  commissionRate: number;
+  totalAgencyAmount: number;
+  agencyName: string;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+export interface Approved {
+  id: string;
+  userId: string;
+  approvedName: string;
+  whatsappNumber: string;
+  amount: number;
+  approvalDate?: string;
+  numberOfUsers: number;
+  countries: string[];
+  address?: string;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+export interface TrustedPerson {
+  id: string;
+  userId?: string;
+  fullName: string;
+  address: string;
+  whatsappNumber: string;
+  idDocuments?: string[];
+  salaryType: 'MONTHLY' | 'BIWEEKLY';
+  baseSalary: number;
+  salaryPeriod?: string;
+  bankAccount?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+export interface Supervisor {
+  id: string;
+  userId: string;
+  supervisorType: 'AGENCY' | 'WHATSAPP';
+  salary: number;
+  salaryPeriod: 'MONTHLY' | 'BIWEEKLY';
+  fullName: string;
+  whatsappNumber: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+export interface Marketer {
+  id: string;
+  userId: string;
+  fullName: string;
+  numberOfPeople: number;
+  marketingMethods: string[];
+  marketingSalary: number;
+  profitPerCustomer: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user?: Pick<User, 'id' | 'email' | 'username'>;
+}
+
+// ============ Statistics Types ============
+
+export interface SupervisorStats {
+  agencyCount: number;
+  whatsappCount: number;
+  totalSalary: number;
+}
+
+export interface MarketerStats {
+  totalMarketers: number;
+  totalPeople: number;
+  totalMarketingSalary: number;
+  totalProfit: number;
+}

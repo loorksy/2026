@@ -371,6 +371,243 @@ class ApiClient {
   async getDashboardReportStats(): Promise<ApiResponse> {
     return this.request('/reports/dashboard-stats');
   }
+
+  // ============ Hosts ============
+  async getHosts(params?: { isActive?: boolean; search?: string }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/hosts${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getHostById(id: string): Promise<ApiResponse> {
+    return this.request(`/hosts/${id}`);
+  }
+
+  async createHost(data: {
+    fullName: string;
+    agencyName: string;
+    address: string;
+    whatsappNumber: string;
+    notes?: string;
+  }): Promise<ApiResponse> {
+    return this.request('/hosts', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateHost(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/hosts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleHostStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/hosts/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteHost(id: string): Promise<ApiResponse> {
+    return this.request(`/hosts/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // ============ Sub-Agents ============
+  async getSubAgents(params?: { isActive?: boolean; search?: string }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/sub-agents${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getSubAgentById(id: string): Promise<ApiResponse> {
+    return this.request(`/sub-agents/${id}`);
+  }
+
+  async createSubAgent(data: {
+    roomId: string;
+    activationCode: string;
+    whatsappNumber: string;
+    commissionRate: number;
+    agencyName: string;
+    notes?: string;
+    numberOfUsers?: number;
+  }): Promise<ApiResponse> {
+    return this.request('/sub-agents', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateSubAgent(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/sub-agents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleSubAgentStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/sub-agents/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async regenerateSubAgentCode(id: string): Promise<ApiResponse> {
+    return this.request(`/sub-agents/${id}/regenerate-code`, {
+      method: 'POST'
+    });
+  }
+
+  async deleteSubAgent(id: string): Promise<ApiResponse> {
+    return this.request(`/sub-agents/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // ============ Approved ============
+  async getApproved(params?: { isActive?: boolean; search?: string; country?: string }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/approved${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getApprovedById(id: string): Promise<ApiResponse> {
+    return this.request(`/approved/${id}`);
+  }
+
+  async getApprovedCountries(): Promise<ApiResponse> {
+    return this.request('/approved/countries');
+  }
+
+  async createApproved(data: {
+    approvedName: string;
+    whatsappNumber: string;
+    amount: number;
+    approvalDate?: string;
+    numberOfUsers?: number;
+    countries?: string[];
+    address?: string;
+    notes?: string;
+  }): Promise<ApiResponse> {
+    return this.request('/approved', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateApproved(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/approved/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleApprovedStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/approved/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteApproved(id: string): Promise<ApiResponse> {
+    return this.request(`/approved/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // ============ Supervisors ============
+  async getSupervisors(params?: { isActive?: boolean; search?: string; supervisorType?: string }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/supervisors${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getSupervisorById(id: string): Promise<ApiResponse> {
+    return this.request(`/supervisors/${id}`);
+  }
+
+  async getSupervisorStats(): Promise<ApiResponse> {
+    return this.request('/supervisors/stats');
+  }
+
+  async createSupervisor(data: {
+    supervisorType: string;
+    salary: number;
+    salaryPeriod: string;
+    fullName: string;
+    whatsappNumber: string;
+  }): Promise<ApiResponse> {
+    return this.request('/supervisors', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateSupervisor(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/supervisors/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleSupervisorStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/supervisors/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteSupervisor(id: string): Promise<ApiResponse> {
+    return this.request(`/supervisors/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
+  // ============ Marketers ============
+  async getMarketers(params?: { isActive?: boolean; search?: string; marketingMethod?: string }): Promise<ApiResponse> {
+    const queryString = params ? new URLSearchParams(params as any).toString() : '';
+    return this.request(`/marketers${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getMarketerById(id: string): Promise<ApiResponse> {
+    return this.request(`/marketers/${id}`);
+  }
+
+  async getMarketerStats(): Promise<ApiResponse> {
+    return this.request('/marketers/stats');
+  }
+
+  async getMarketingMethods(): Promise<ApiResponse> {
+    return this.request('/marketers/methods');
+  }
+
+  async createMarketer(data: {
+    fullName: string;
+    numberOfPeople?: number;
+    marketingMethods?: string[];
+    marketingSalary?: number;
+    profitPerCustomer?: number;
+  }): Promise<ApiResponse> {
+    return this.request('/marketers', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async updateMarketer(id: string, data: any): Promise<ApiResponse> {
+    return this.request(`/marketers/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  async toggleMarketerStatus(id: string): Promise<ApiResponse> {
+    return this.request(`/marketers/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  async deleteMarketer(id: string): Promise<ApiResponse> {
+    return this.request(`/marketers/${id}`, {
+      method: 'DELETE'
+    });
+  }
 }
 
 export const api = new ApiClient();

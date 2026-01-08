@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api';
+import { TrustedPerson } from '../types';
 import './TrustedPersons.css';
-
-interface TrustedPerson {
-  id: string;
-  fullName: string;
-  address: string;
-  whatsappNumber: string;
-  salaryType: string;
-  baseSalary: number;
-  bankAccount?: string;
-  isActive: boolean;
-  createdAt: string;
-}
 
 const TrustedPersons: React.FC = () => {
   const navigate = useNavigate();

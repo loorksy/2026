@@ -22,6 +22,14 @@ model User {
   auditLogs     AuditLog[]
   assignedRoles UserRole[]  @relation("AssignedBy")
   
+  // Related entities
+  hosts         Host[]
+  subAgents     SubAgent[]
+  approved      Approved[]
+  trustedPersons TrustedPerson[]
+  supervisors   Supervisor[]
+  marketers     Marketer[]
+  
   @@map("users")
 }
 
@@ -115,6 +123,11 @@ enum SalaryType {
   BIWEEKLY
 }
 
+enum SupervisorType {
+  AGENCY
+  WHATSAPP
+}
+
 enum TransferMethod {
   MANUAL_CASH
   BANK_TRANSFER
@@ -151,6 +164,122 @@ enum CreditStatus {
   CLOSED
   CANCELLED
 }
+
+// ============ New User Types ============
+
+model Host {
+  id              String    @id @default(uuid())
+  userId          String
+  fullName        String
+  agencyName      String
+  address         String
+  whatsappNumber  String
+  notes           String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("hosts")
+}
+
+model SubAgent {
+  id                String    @id @default(uuid())
+  userId            String
+  roomId            String
+  activationCode    String
+  numberOfUsers     Int       @default(0)
+  whatsappNumber    String
+  commissionRate    Decimal   @db.Decimal(5, 2)
+  totalAgencyAmount Decimal   @db.Decimal(15, 2) @default(0)
+  agencyName        String
+  notes             String?
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sub_agents")
+}
+
+model Approved {
+  id              String    @id @default(uuid())
+  userId          String
+  approvedName    String
+  whatsappNumber  String
+  amount          Decimal   @db.Decimal(15, 2)
+  approvalDate    DateTime?
+  numberOfUsers   Int       @default(0)
+  countries       Json?     // JSON array of countries
+  address         String?
+  notes           String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("approved")
+}
+
+model TrustedPerson {
+  id              String            @id @default(uuid())
+  userId          String?
+  fullName        String
+  address         String
+  whatsappNumber  String
+  idDocuments     Json?             // JSON array of file URLs
+  salaryType      SalaryType
+  baseSalary      Decimal           @db.Decimal(10, 2)
+  salaryPeriod    String?
+  bankAccount     String?
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  user            User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  manualTransfers ManualTransfer[]
+  
+  @@map("trusted_persons")
+}
+
+model Supervisor {
+  id              String        @id @default(uuid())
+  userId          String
+  supervisorType  SupervisorType
+  salary          Decimal       @db.Decimal(10, 2)
+  salaryPeriod    SalaryType
+  fullName        String
+  whatsappNumber  String
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("supervisors")
+}
+
+model Marketer {
+  id                String    @id @default(uuid())
+  userId            String
+  fullName          String
+  numberOfPeople    Int       @default(0)
+  marketingMethods  Json?     // JSON array: facebook, instagram, whatsapp, other
+  marketingSalary   Decimal   @db.Decimal(10, 2) @default(0)
+  profitPerCustomer Decimal   @db.Decimal(10, 2) @default(0)
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("marketers")
+}
+
+// ============ Existing Models ============
 
 model Company {
   id            String    @id @default(uuid())
@@ -218,25 +347,6 @@ model ExchangeRate {
   createdAt     DateTime @default(now())
   
   @@map("exchange_rates")
-}
-
-model TrustedPerson {
-  id              String            @id @default(uuid())
-  fullName        String
-  address         String
-  whatsappNumber  String
-  idDocuments     Json?
-  salaryType      SalaryType
-  baseSalary      Decimal           @db.Decimal(10, 2)
-  salaryPeriod    String?
-  bankAccount     String?
-  isActive        Boolean           @default(true)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  
-  manualTransfers ManualTransfer[]
-  
-  @@map("trusted_persons")
 }
 
 model ManualTransfer {
