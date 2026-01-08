@@ -58,6 +58,12 @@ const Navbar = () => {
               التحويلات
             </Link>
           )}
+
+          {hasPermission('reports', 'READ') && (
+            <Link to="/reports" className="navbar-link">
+              التقارير
+            </Link>
+          )}
         </div>
 
         <div className="navbar-user">

@@ -9,6 +9,7 @@ import auditLogRoutes from './routes/auditLogRoutes';
 import trustedPersonRoutes from './routes/trustedPersonRoutes';
 import manualTransferRoutes from './routes/manualTransferRoutes';
 import transferRecordRoutes from './routes/transferRecordRoutes';
+import reportRoutes from './routes/reportRoutes';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/api/audit-logs', auditLogRoutes);
 app.use('/api/trusted-persons', trustedPersonRoutes);
 app.use('/api/manual-transfers', manualTransferRoutes);
 app.use('/api/transfer-records', transferRecordRoutes);
+app.use('/api/reports', reportRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({

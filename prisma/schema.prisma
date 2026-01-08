@@ -133,6 +133,93 @@ enum RecordSalaryType {
   OTHER
 }
 
+enum ShippingStatus {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum CompanyType {
+  CLIENT
+  SUPPLIER
+  BOTH
+}
+
+enum CreditStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+}
+
+model Company {
+  id            String    @id @default(uuid())
+  name          String    @unique
+  type          CompanyType
+  contactPerson String?
+  phone         String?
+  email         String?
+  address       String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  sentShipments     Shipping[] @relation("SentShipments")
+  receivedShipments Shipping[] @relation("ReceivedShipments")
+  
+  @@map("companies")
+}
+
+model Shipping {
+  id              String         @id @default(uuid())
+  trackingNumber  String         @unique
+  senderId        String
+  receiverId      String
+  origin          String
+  destination     String
+  weight          Decimal        @db.Decimal(10, 2)
+  cost            Decimal        @db.Decimal(10, 2)
+  price           Decimal        @db.Decimal(10, 2)
+  status          ShippingStatus @default(PENDING)
+  shipmentDate    DateTime       @default(now())
+  estimatedArrival DateTime?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  
+  sender          Company        @relation("SentShipments", fields: [senderId], references: [id])
+  receiver        Company        @relation("ReceivedShipments", fields: [receiverId], references: [id])
+  
+  @@map("shipping")
+}
+
+model Credit {
+  id            String       @id @default(uuid())
+  creditNumber  String       @unique
+  bankName      String
+  amount        Decimal      @db.Decimal(15, 2)
+  currency      String       @default("USD")
+  openDate      DateTime     @default(now())
+  expiryDate    DateTime
+  status        CreditStatus @default(OPEN)
+  notes         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  @@map("credits")
+}
+
+model ExchangeRate {
+  id            String   @id @default(uuid())
+  fromCurrency  String
+  toCurrency    String
+  rate          Decimal  @db.Decimal(10, 4)
+  date          DateTime @default(now())
+  createdAt     DateTime @default(now())
+  
+  @@map("exchange_rates")
+}
+
 model TrustedPerson {
   id              String            @id @default(uuid())
   fullName        String

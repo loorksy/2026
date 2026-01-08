@@ -13,6 +13,7 @@ import TrustedPersonDetail from './pages/TrustedPersonDetail';
 import ManualTransfers from './pages/ManualTransfers';
 import ManualTransferDetail from './pages/ManualTransferDetail';
 import CreateManualTransfer from './pages/CreateManualTransfer';
+import Reports from './pages/Reports';
 import './App.css';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -111,6 +112,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ManualTransferDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
               </ProtectedRoute>
             }
           />

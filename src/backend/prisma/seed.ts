@@ -14,7 +14,11 @@ const resources = [
   'dashboard',
   'trusted_persons',
   'manual_transfers',
-  'transfer_records'
+  'transfer_records',
+  'shipping',
+  'companies',
+  'credits',
+  'exchange_rates'
 ];
 
 const actions = [Action.CREATE, Action.READ, Action.UPDATE, Action.DELETE];
@@ -217,6 +221,58 @@ async function main() {
 
     console.log(`✅ Created test user: ${testUser.email} (password: password123)`);
   }
+
+  console.log('📦 Creating sample data for reports...');
+  const company1 = await prisma.company.upsert({
+    where: { name: 'شركة الأفق للتجارة' },
+    update: {},
+    create: {
+      name: 'شركة الأفق للتجارة',
+      type: 'BOTH',
+      contactPerson: 'أحمد محمد',
+      phone: '07701234567'
+    }
+  });
+
+  const company2 = await prisma.company.upsert({
+    where: { name: 'مجموعة النور للشحن' },
+    update: {},
+    create: {
+      name: 'مجموعة النور للشحن',
+      type: 'SUPPLIER',
+      contactPerson: 'سارة علي',
+      phone: '07801234567'
+    }
+  });
+
+  await prisma.shipping.upsert({
+    where: { trackingNumber: 'SHP-001' },
+    update: {},
+    create: {
+      trackingNumber: 'SHP-001',
+      senderId: company1.id,
+      receiverId: company2.id,
+      origin: 'Baghdad',
+      destination: 'Erbil',
+      weight: 10.5,
+      cost: 50000,
+      price: 75000,
+      status: 'DELIVERED',
+      shipmentDate: new Date()
+    }
+  });
+
+  await prisma.credit.upsert({
+    where: { creditNumber: 'LC-2024-001' },
+    update: {},
+    create: {
+      creditNumber: 'LC-2024-001',
+      bankName: 'مصرف الرافدين',
+      amount: 10000,
+      currency: 'USD',
+      expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+    }
+  });
 
   console.log('🎉 Seed completed successfully!');
 }

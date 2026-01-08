@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await api.getAuditLogStats();
+      const response = await api.getDashboardReportStats();
       if (response.success) {
         setStats(response.data);
       }
@@ -37,7 +37,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="container">
         <div className="dashboard-header">
-          <h1>لوحة التحكم</h1>
+          <h1>لوحة التحكم الشاملة</h1>
           <p>مرحباً، {user?.firstName || user?.username}</p>
         </div>
 
@@ -45,32 +45,32 @@ const Dashboard = () => {
           <div className="stat-card">
             <div className="stat-icon stat-icon-primary">👥</div>
             <div className="stat-content">
-              <div className="stat-label">الأدوار</div>
-              <div className="stat-value">{user?.roles?.length || 0}</div>
+              <div className="stat-label">المستخدمين</div>
+              <div className="stat-value">{stats?.counts?.users || 0}</div>
             </div>
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon stat-icon-success">🔐</div>
+            <div className="stat-icon stat-icon-success">🚢</div>
             <div className="stat-content">
-              <div className="stat-label">الصلاحيات</div>
-              <div className="stat-value">{user?.permissions?.length || 0}</div>
+              <div className="stat-label">الشحنات</div>
+              <div className="stat-value">{stats?.counts?.shipments || 0}</div>
             </div>
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon stat-icon-info">📊</div>
+            <div className="stat-icon stat-icon-info">🏢</div>
             <div className="stat-content">
-              <div className="stat-label">سجلات التدقيق</div>
-              <div className="stat-value">{stats?.totalLogs || 0}</div>
+              <div className="stat-label">الشركات</div>
+              <div className="stat-value">{stats?.counts?.companies || 0}</div>
             </div>
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon stat-icon-warning">⚡</div>
+            <div className="stat-icon stat-icon-warning">💰</div>
             <div className="stat-content">
-              <div className="stat-label">الحالة</div>
-              <div className="stat-value">نشط</div>
+              <div className="stat-label">إجمالي الإيرادات</div>
+              <div className="stat-value">{stats?.totalRevenue || 0}</div>
             </div>
           </div>
         </div>
@@ -78,19 +78,17 @@ const Dashboard = () => {
         <div className="dashboard-content">
           <div className="card">
             <div className="card-header">
-              <h2 className="card-title">الأدوار المسندة</h2>
+              <h2 className="card-title">إحصائيات إضافية</h2>
             </div>
-            <div className="roles-list">
-              {user?.roles && user.roles.length > 0 ? (
-                user.roles.map((role) => (
-                  <div key={role.id} className="role-item">
-                    <span className="role-name">{role.name}</span>
-                    <span className="role-description">{role.description}</span>
-                  </div>
-                ))
-              ) : (
-                <p className="text-center text-secondary">لا توجد أدوار مسندة</p>
-              )}
+            <div className="additional-stats">
+              <div className="stat-item">
+                <span className="stat-label">الأدوار النظامية:</span>
+                <span className="stat-value">{stats?.counts?.roles || 0}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">الاعتمادات المفتوحة:</span>
+                <span className="stat-value">{stats?.counts?.credits || 0}</span>
+              </div>
             </div>
           </div>
 
@@ -129,6 +127,9 @@ const Dashboard = () => {
 
 const getActionColor = (action: string) => {
   const colors: Record<string, string> = {
+    CREATE: 'success',
+    UPDATE: 'info',
+    DELETE: 'danger',
     CREATED: 'success',
     UPDATED: 'info',
     DELETED: 'danger',
